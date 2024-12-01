@@ -1,0 +1,10 @@
+{
+    "protoc": {
+        "path": "protoc",
+        "compile_on_save": true,
+        "options": [
+            "-I=c:\\Users\\saltytaro\\Desktop\\RadiusRumble\\shared",
+            "--go_out=server",
+        ]
+    }
+}
