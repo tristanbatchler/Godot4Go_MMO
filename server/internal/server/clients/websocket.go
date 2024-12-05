@@ -19,6 +19,7 @@ type WebSocketClient struct {
 	sendChan chan *packets.Packet
 	state    server.ClientStateHandler
 	logger   *log.Logger
+	dbTx     *server.DbTx
 }
 
 func NewWebSocketClient(hub *server.Hub, writer http.ResponseWriter, request *http.Request) (server.ClientInterfacer, error) {
@@ -39,6 +40,7 @@ func NewWebSocketClient(hub *server.Hub, writer http.ResponseWriter, request *ht
 		conn:     conn,
 		sendChan: make(chan *packets.Packet, 256),
 		logger:   log.New(log.Writer(), "Client unknown: ", log.LstdFlags),
+		dbTx:     hub.NewDbTx(),
 	}
 
 	return c, nil
@@ -165,6 +167,10 @@ func (c *WebSocketClient) WritePump() {
 			continue
 		}
 	}
+}
+
+func (c *WebSocketClient) DbTx() *server.DbTx {
+	return c.dbTx
 }
 
 func (c *WebSocketClient) Close(reason string) {

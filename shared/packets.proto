@@ -5,13 +5,19 @@ option go_package = "pkg/packets";
 
 message ChatMessage { string msg = 1; }
 message IdMessage { uint64 id = 1; }
-// ..
+message LoginRequestMessage { string username = 1; string password = 2; }
+message RegisterRequestMessage { string username = 1; string password = 2; }
+message OkResponseMessage { }
+message DenyResponseMessage { string reason = 1; }
 
 message Packet {
     uint64 sender_id = 1;
     oneof msg {
         ChatMessage chat = 2;
         IdMessage id = 3;
-        // ..
+        LoginRequestMessage login_request = 4;
+        RegisterRequestMessage register_request = 5;
+        OkResponseMessage ok_response = 6;
+        DenyResponseMessage deny_response = 7;
     }
 }
