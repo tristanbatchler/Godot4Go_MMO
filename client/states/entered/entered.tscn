@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://bjufjcjr7xa57"]
+
+[ext_resource type="Script" path="res://states/entered/entered.gd" id="1_2dtn3"]
+[ext_resource type="Script" path="res://classes/log/log.gd" id="2_iaqic"]
+
+[node name="Entered" type="Node"]
+script = ExtResource("1_2dtn3")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Log" type="RichTextLabel" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_iaqic")
