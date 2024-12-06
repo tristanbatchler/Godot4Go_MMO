@@ -173,6 +173,10 @@ func (c *WebSocketClient) DbTx() *server.DbTx {
 	return c.dbTx
 }
 
+func (c *WebSocketClient) SharedGameObjects() *server.SharedGameObjects {
+	return c.hub.SharedGameObjects
+}
+
 func (c *WebSocketClient) Close(reason string) {
 	c.logger.Printf("Closing client connection because: %s", reason)
 

@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://q4h1urjy8ueo"]
+[gd_scene load_steps=4 format=3 uid="uid://q4h1urjy8ueo"]
 
 [ext_resource type="Script" path="res://states/ingame/ingame.gd" id="1_qy1gi"]
 [ext_resource type="Script" path="res://classes/log/log.gd" id="2_yxngk"]
+[ext_resource type="Texture2D" uid="uid://cpvstjd3l3gg2" path="res://resources/floor.svg" id="3_bkp70"]
 
 [node name="InGame" type="Node"]
 script = ExtResource("1_qy1gi")
@@ -23,3 +24,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("2_yxngk")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Floor" type="Sprite2D" parent="World"]
+texture_repeat = 2
+texture = ExtResource("3_bkp70")
+region_enabled = true
+region_rect = Rect2(0, 0, 10000, 10000)
