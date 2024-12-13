@@ -8,3 +8,9 @@ type Player struct {
 	Direction float64
 	Speed     float64
 }
+
+type Spore struct {
+	X      float64
+	Y      float64
+	Radius float64
+}

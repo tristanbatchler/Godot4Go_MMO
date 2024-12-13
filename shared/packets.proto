@@ -11,6 +11,9 @@ message OkResponseMessage { }
 message DenyResponseMessage { string reason = 1; }
 message PlayerMessage { uint64 id = 1; string name = 2; double x = 3; double y = 4; double radius = 5; double direction = 6; double speed = 7; }
 message PlayerDirectionMessage { double direction = 1; }
+message SporeMessage { uint64 id = 1; double x = 2; double y = 3; double radius = 4; }
+message SporeConsumedMessage { uint64 spore_id = 1; }
+message SporesBatchMessage { repeated SporeMessage spores = 1; }
 
 message Packet {
     uint64 sender_id = 1;
@@ -23,5 +26,8 @@ message Packet {
         DenyResponseMessage deny_response = 7;
         PlayerMessage player = 8;
         PlayerDirectionMessage player_direction = 9;
+        SporeMessage spore = 10;
+        SporeConsumedMessage spore_consumed = 11;
+        SporesBatchMessage spores_batch = 12;
     }
 }

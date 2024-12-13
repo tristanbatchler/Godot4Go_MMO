@@ -41,6 +41,9 @@ func (g *InGame) OnEnter() {
 
 	// Send the player's initial state to the client
 	g.client.SocketSend(packets.NewPlayer(g.client.Id(), g.player))
+
+	// Send the spores to the client in the background
+	go g.sendInitialSpores(20, 50*time.Millisecond)
 }
 
 func (g *InGame) HandleMessage(senderId uint64, message packets.Msg) {
@@ -48,7 +51,11 @@ func (g *InGame) HandleMessage(senderId uint64, message packets.Msg) {
 	case *packets.Packet_Player:
 		g.handlePlayer(senderId, message)
 	case *packets.Packet_PlayerDirection:
-		g.handlerPlayerDirection(senderId, message)
+		g.handlePlayerDirection(senderId, message)
+	case *packets.Packet_Chat:
+		g.handleChat(senderId, message)
+	case *packets.Packet_SporeConsumed:
+		g.handleSporeConsumed(senderId, message)
 	}
 }
 
@@ -68,7 +75,7 @@ func (g *InGame) handlePlayer(senderId uint64, message *packets.Packet_Player) {
 	g.client.SocketSendAs(message, senderId)
 }
 
-func (g *InGame) handlerPlayerDirection(senderId uint64, message *packets.Packet_PlayerDirection) {
+func (g *InGame) handlePlayerDirection(senderId uint64, message *packets.Packet_PlayerDirection) {
 	if senderId != g.client.Id() {
 		g.logger.Println("Received player direction message from a different client, ignoring")
 		return
@@ -82,6 +89,18 @@ func (g *InGame) handlerPlayerDirection(senderId uint64, message *packets.Packet
 		g.cancelPlayerUpdateLoop = cancel
 		go g.playerUpdateLoop(ctx)
 	}
+}
+
+func (g *InGame) handleChat(senderId uint64, message *packets.Packet_Chat) {
+	if senderId == g.client.Id() {
+		g.client.Broadcast(message)
+	} else {
+		g.client.SocketSendAs(message, senderId)
+	}
+}
+
+func (g *InGame) handleSporeConsumed(senderId uint64, message *packets.Packet_SporeConsumed) {
+	g.logger.Printf("Spore %d consumed by player", message.SporeConsumed.SporeId)
 }
 
 func (g *InGame) playerUpdateLoop(ctx context.Context) {
@@ -109,4 +128,23 @@ func (g *InGame) syncPlayer(delta float64) {
 	updatePlayer := packets.NewPlayer(g.client.Id(), g.player)
 	g.client.Broadcast(updatePlayer)
 	go g.client.SocketSend(updatePlayer)
+}
+
+func (g *InGame) sendInitialSpores(batchSize int, delay time.Duration) {
+	sporesBatch := make(map[uint64]*objects.Spore, batchSize)
+
+	g.client.SharedGameObjects().Spores.ForEach(func(sporeId uint64, spore *objects.Spore) {
+		sporesBatch[sporeId] = spore
+
+		if len(sporesBatch) >= batchSize {
+			g.client.SocketSend(packets.NewSporesBatch(sporesBatch))
+			sporesBatch = make(map[uint64]*objects.Spore, batchSize)
+			time.Sleep(delay)
+		}
+	})
+
+	// Send any remaining spores
+	if len(sporesBatch) > 0 {
+		g.client.SocketSend(packets.NewSporesBatch(sporesBatch))
+	}
 }
