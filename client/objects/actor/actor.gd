@@ -14,7 +14,11 @@ var speed: float
 var is_player: bool
 
 var velocity: Vector2
-var radius: float
+var radius: float:
+	set(new_radius):
+		radius = new_radius
+		_collision_shape.radius = new_radius
+		queue_redraw()
 
 @onready var _nameplate: Label = $Nameplate
 @onready var _collision_shape: CircleShape2D = $CollisionShape2D.shape
