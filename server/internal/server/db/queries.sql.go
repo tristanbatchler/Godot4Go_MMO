@@ -9,6 +9,32 @@ import (
 	"context"
 )
 
+const createPlayer = `-- name: CreatePlayer :one
+INSERT INTO players (
+    user_id, name
+) VALUES (
+    ?, ?
+)
+RETURNING id, user_id, name, best_score
+`
+
+type CreatePlayerParams struct {
+	UserID int64
+	Name   string
+}
+
+func (q *Queries) CreatePlayer(ctx context.Context, arg CreatePlayerParams) (Player, error) {
+	row := q.db.QueryRowContext(ctx, createPlayer, arg.UserID, arg.Name)
+	var i Player
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Name,
+		&i.BestScore,
+	)
+	return i, err
+}
+
 const createUser = `-- name: CreateUser :one
 INSERT INTO users (
     username, password_hash
@@ -30,6 +56,64 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
+const getPlayerByUserId = `-- name: GetPlayerByUserId :one
+SELECT id, user_id, name, best_score FROM players
+WHERE user_id = ? LIMIT 1
+`
+
+func (q *Queries) GetPlayerByUserId(ctx context.Context, userID int64) (Player, error) {
+	row := q.db.QueryRowContext(ctx, getPlayerByUserId, userID)
+	var i Player
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Name,
+		&i.BestScore,
+	)
+	return i, err
+}
+
+const getTopScores = `-- name: GetTopScores :many
+SELECT name, best_score
+FROM players
+ORDER BY best_score DESC
+LIMIT ?
+OFFSET ?
+`
+
+type GetTopScoresParams struct {
+	Limit  int64
+	Offset int64
+}
+
+type GetTopScoresRow struct {
+	Name      string
+	BestScore int64
+}
+
+func (q *Queries) GetTopScores(ctx context.Context, arg GetTopScoresParams) ([]GetTopScoresRow, error) {
+	rows, err := q.db.QueryContext(ctx, getTopScores, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetTopScoresRow
+	for rows.Next() {
+		var i GetTopScoresRow
+		if err := rows.Scan(&i.Name, &i.BestScore); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getUserByUsername = `-- name: GetUserByUsername :one
 SELECT id, username, password_hash FROM users
 WHERE username = ? LIMIT 1
@@ -40,4 +124,20 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User,
 	var i User
 	err := row.Scan(&i.ID, &i.Username, &i.PasswordHash)
 	return i, err
+}
+
+const updatePlayerBestScore = `-- name: UpdatePlayerBestScore :exec
+UPDATE players
+SET best_score = ?
+WHERE id = ?
+`
+
+type UpdatePlayerBestScoreParams struct {
+	BestScore int64
+	ID        int64
+}
+
+func (q *Queries) UpdatePlayerBestScore(ctx context.Context, arg UpdatePlayerBestScoreParams) error {
+	_, err := q.db.ExecContext(ctx, updatePlayerBestScore, arg.BestScore, arg.ID)
+	return err
 }

@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://q4h1urjy8ueo"]
+[gd_scene load_steps=5 format=3 uid="uid://q4h1urjy8ueo"]
 
 [ext_resource type="Script" path="res://states/ingame/ingame.gd" id="1_qy1gi"]
+[ext_resource type="PackedScene" uid="uid://dhmxk63i0qrrm" path="res://classes/hiscores/hiscores.tscn" id="2_3ykoh"]
 [ext_resource type="Script" path="res://classes/log/log.gd" id="2_yxngk"]
 [ext_resource type="Texture2D" uid="uid://cpvstjd3l3gg2" path="res://resources/floor.svg" id="3_bkp70"]
 
@@ -9,20 +10,24 @@ script = ExtResource("1_qy1gi")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="LineEdit" type="LineEdit" parent="UI"]
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 31.0
-grow_horizontal = 2
-
-[node name="Log" type="RichTextLabel" parent="UI"]
-custom_minimum_size = Vector2(0, 300)
-anchors_preset = 12
-anchor_top = 1.0
+[node name="VBoxContainer" type="VBoxContainer" parent="UI"]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
+
+[node name="LineEdit" type="LineEdit" parent="UI/VBoxContainer"]
+layout_mode = 2
+
+[node name="Hiscores" parent="UI/VBoxContainer" instance=ExtResource("2_3ykoh")]
+custom_minimum_size = Vector2(200, 150)
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Log" type="RichTextLabel" parent="UI/VBoxContainer"]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
 script = ExtResource("2_yxngk")
 
 [node name="World" type="Node2D" parent="."]

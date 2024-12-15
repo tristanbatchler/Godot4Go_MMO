@@ -36,6 +36,10 @@ text = "Login"
 layout_mode = 2
 text = "Register"
 
+[node name="HiscoresButton" type="Button" parent="UI/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Hiscores"
+
 [node name="Log" type="RichTextLabel" parent="UI/VBoxContainer"]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2

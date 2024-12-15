@@ -7,6 +7,8 @@ type Player struct {
 	Radius    float64
 	Direction float64
 	Speed     float64
+	BestScore int64
+	DbId      int64
 }
 
 type Spore struct {
