@@ -56,6 +56,24 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
+const getPlayerByName = `-- name: GetPlayerByName :one
+SELECT id, user_id, name, best_score FROM players
+WHERE name LIKE ?
+LIMIT 1
+`
+
+func (q *Queries) GetPlayerByName(ctx context.Context, name string) (Player, error) {
+	row := q.db.QueryRowContext(ctx, getPlayerByName, name)
+	var i Player
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.Name,
+		&i.BestScore,
+	)
+	return i, err
+}
+
 const getPlayerByUserId = `-- name: GetPlayerByUserId :one
 SELECT id, user_id, name, best_score FROM players
 WHERE user_id = ? LIMIT 1
@@ -71,6 +89,21 @@ func (q *Queries) GetPlayerByUserId(ctx context.Context, userID int64) (Player, 
 		&i.BestScore,
 	)
 	return i, err
+}
+
+const getPlayerRank = `-- name: GetPlayerRank :one
+SELECT COUNT(*) + 1 as "rank" FROM players
+WHERE best_score >= (
+    SELECT best_score FROM players p2
+    WHERE p2.id = ?
+)
+`
+
+func (q *Queries) GetPlayerRank(ctx context.Context, id int64) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getPlayerRank, id)
+	var rank int64
+	err := row.Scan(&rank)
+	return rank, err
 }
 
 const getTopScores = `-- name: GetTopScores :many

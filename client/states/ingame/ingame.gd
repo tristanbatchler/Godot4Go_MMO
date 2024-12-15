@@ -98,8 +98,15 @@ func _handle_spore_msg(sender_id: int, spore_msg: packets.SporeMessage) -> void:
 	var y := spore_msg.get_y()
 	var radius := spore_msg.get_radius()
 	
+	var underneath_player := false
+	if GameManager.client_id in _players:
+		var player := _players[GameManager.client_id]
+		var player_pos := Vector2(player.position.x, player.position.y)
+		var spore_pos := Vector2(x, y)
+		underneath_player = player_pos.distance_squared_to(spore_pos) < player.radius * player.radius
+	
 	if spore_id not in _spores:
-		var spore := Spore.instantiate(spore_id, x, y, radius)
+		var spore := Spore.instantiate(spore_id, x, y, radius, underneath_player)
 		_world.add_child(spore)
 		_spores[spore_id] = spore
 
@@ -134,6 +141,9 @@ func _on_player_area_entered(area: Area2D) -> void:
 		_collide_actor(area as Actor)
 		
 func _consume_spore(spore: Spore) -> void:
+	if spore.underneath_player:
+		return
+	
 	var packet := packets.Packet.new()
 	var spore_consumed_msg := packet.new_spore_consumed()
 	spore_consumed_msg.set_spore_id(spore.spore_id)
