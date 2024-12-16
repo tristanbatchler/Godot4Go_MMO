@@ -1,8 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://bqwjrj505leq4"]
+[gd_scene load_steps=8 format=3 uid="uid://bqwjrj505leq4"]
 
 [ext_resource type="Script" path="res://states/browsing_hiscores/browsing_hiscores.gd" id="1_8i2dq"]
 [ext_resource type="PackedScene" uid="uid://dhmxk63i0qrrm" path="res://classes/hiscores/hiscores.tscn" id="2_ixk3t"]
+[ext_resource type="Theme" uid="uid://8i7biu4ku8gp" path="res://resources/game_theme.tres" id="2_rvhdi"]
 [ext_resource type="Script" path="res://classes/log/log.gd" id="3_6mgxe"]
+[ext_resource type="Shader" path="res://resources/background_effect.gdshader" id="4_586s4"]
+[ext_resource type="Texture2D" uid="uid://cpvstjd3l3gg2" path="res://resources/floor.svg" id="5_ffbgg"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cr4kg"]
+shader = ExtResource("4_586s4")
+shader_parameter/amplitutde = Vector2(1, 0)
+shader_parameter/speed = Vector2(1, 0)
 
 [node name="BrowsingHiscores" type="Node"]
 script = ExtResource("1_8i2dq")
@@ -22,6 +30,7 @@ offset_right = 200.0
 offset_bottom = 217.5
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_rvhdi")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="UI/VBoxContainer"]
 layout_mode = 2
@@ -46,4 +55,15 @@ layout_mode = 2
 [node name="Log" type="RichTextLabel" parent="UI/VBoxContainer"]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
+scroll_following = true
 script = ExtResource("3_6mgxe")
+
+[node name="Background" type="Node2D" parent="."]
+
+[node name="Background" type="Sprite2D" parent="Background"]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_cr4kg")
+texture = ExtResource("5_ffbgg")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 1152, 648)

@@ -44,6 +44,7 @@ func NewPlayer(id uint64, player *objects.Player) Msg {
 			Radius:    player.Radius,
 			Direction: player.Direction,
 			Speed:     player.Speed,
+			Color:     player.Color,
 		},
 	}
 }
@@ -80,6 +81,14 @@ func NewHiscoreBoard(hiscores []*HiscoreMessage) Msg {
 	return &Packet_HiscoreBoard{
 		HiscoreBoard: &HiscoreBoardMessage{
 			Hiscores: hiscores,
+		},
+	}
+}
+
+func NewDisconnect(reason string) Msg {
+	return &Packet_Disconnect{
+		Disconnect: &DisconnectMessage{
+			Reason: reason,
 		},
 	}
 }

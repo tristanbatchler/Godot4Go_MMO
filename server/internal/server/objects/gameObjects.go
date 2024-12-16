@@ -11,6 +11,7 @@ type Player struct {
 	Speed     float64
 	BestScore int64
 	DbId      int64
+	Color     int32
 }
 
 type Spore struct {

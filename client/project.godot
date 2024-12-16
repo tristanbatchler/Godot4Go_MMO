@@ -20,6 +20,10 @@ config/icon="res://icon.svg"
 WS="*res://websockets.gd"
 GameManager="*res://game_manager.gd"
 
+[display]
+
+window/stretch/mode="viewport"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/protobuf/plugin.cfg")

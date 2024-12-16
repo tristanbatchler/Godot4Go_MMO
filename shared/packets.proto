@@ -6,10 +6,10 @@ option go_package = "pkg/packets";
 message ChatMessage { string msg = 1; }
 message IdMessage { uint64 id = 1; }
 message LoginRequestMessage { string username = 1; string password = 2; }
-message RegisterRequestMessage { string username = 1; string password = 2; }
+message RegisterRequestMessage { string username = 1; string password = 2; int32 color = 3; }
 message OkResponseMessage { }
 message DenyResponseMessage { string reason = 1; }
-message PlayerMessage { uint64 id = 1; string name = 2; double x = 3; double y = 4; double radius = 5; double direction = 6; double speed = 7; }
+message PlayerMessage { uint64 id = 1; string name = 2; double x = 3; double y = 4; double radius = 5; double direction = 6; double speed = 7; int32 color = 8; }
 message PlayerDirectionMessage { double direction = 1; }
 message SporeMessage { uint64 id = 1; double x = 2; double y = 3; double radius = 4; }
 message SporeConsumedMessage { uint64 spore_id = 1; }
@@ -20,6 +20,7 @@ message HiscoreMessage { uint64 rank = 1; string name = 2; uint64 score = 3; }
 message HiscoreBoardMessage { repeated HiscoreMessage hiscores = 1; }
 message FinishedBrowsingHiscoresMessage { }
 message SearchHiscoreMessage { string name = 1; }
+message DisconnectMessage { string reason = 1; }
 
 message Packet {
     uint64 sender_id = 1;
@@ -41,5 +42,6 @@ message Packet {
         HiscoreBoardMessage hiscore_board = 16;
         FinishedBrowsingHiscoresMessage finished_browsing_hiscores = 17;
         SearchHiscoreMessage search_hiscore = 18;
+        DisconnectMessage disconnect = 19;
     }
 }

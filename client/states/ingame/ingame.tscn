@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://q4h1urjy8ueo"]
+[gd_scene load_steps=6 format=3 uid="uid://q4h1urjy8ueo"]
 
 [ext_resource type="Script" path="res://states/ingame/ingame.gd" id="1_qy1gi"]
 [ext_resource type="PackedScene" uid="uid://dhmxk63i0qrrm" path="res://classes/hiscores/hiscores.tscn" id="2_3ykoh"]
+[ext_resource type="Theme" uid="uid://8i7biu4ku8gp" path="res://resources/game_theme.tres" id="2_f516o"]
 [ext_resource type="Script" path="res://classes/log/log.gd" id="2_yxngk"]
 [ext_resource type="Texture2D" uid="uid://cpvstjd3l3gg2" path="res://resources/floor.svg" id="3_bkp70"]
 
@@ -10,22 +11,42 @@ script = ExtResource("1_qy1gi")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI"]
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_f516o")
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
 
-[node name="LineEdit" type="LineEdit" parent="UI/VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer"]
 layout_mode = 2
 
-[node name="Hiscores" parent="UI/VBoxContainer" instance=ExtResource("2_3ykoh")]
-custom_minimum_size = Vector2(200, 150)
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LogoutButton" type="Button" parent="UI/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Logout"
+
+[node name="LineEdit" type="LineEdit" parent="UI/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SendButton" type="Button" parent="UI/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Send"
+
+[node name="Hiscores" parent="UI/MarginContainer/VBoxContainer" instance=ExtResource("2_3ykoh")]
+custom_minimum_size = Vector2(300, 150)
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Log" type="RichTextLabel" parent="UI/VBoxContainer"]
+[node name="Log" type="RichTextLabel" parent="UI/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 script = ExtResource("2_yxngk")

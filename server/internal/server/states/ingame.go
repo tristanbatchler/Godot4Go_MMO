@@ -60,6 +60,8 @@ func (g *InGame) HandleMessage(senderId uint64, message packets.Msg) {
 		g.handlePlayerConsumed(senderId, message)
 	case *packets.Packet_Spore:
 		g.handleSpore(senderId, message)
+	case *packets.Packet_Disconnect:
+		g.handleDisconnect(senderId, message)
 	}
 }
 
@@ -180,14 +182,15 @@ func (g *InGame) handlePlayerConsumed(senderId uint64, message *packets.Packet_P
 		return
 	}
 
-	// Finally, check the other player's radius is smaller than our player's
-	if g.player.Radius <= other.Radius*1.5 {
-		g.logger.Println(errMsg + "player's radius not big enough")
+	// Finally, check the other player's mass is less than our player's
+	ourMass := radToMass(g.player.Radius)
+	otherMass := radToMass(other.Radius)
+	if ourMass <= otherMass*1.5 {
+		g.logger.Printf(errMsg+"player not massive enough to consume the other player (our radius: %f, other radius: %f)", g.player.Radius, other.Radius)
 		return
 	}
 
 	// If we made it this far, the player consumption is valid, so grow the player, remove the consumed other, and broadcast the event
-	otherMass := radToMass(other.Radius)
 	g.player.Radius = g.nextRadius(otherMass)
 
 	go g.client.SharedGameObjects().Players.Remove(otherId)
@@ -199,6 +202,15 @@ func (g *InGame) handlePlayerConsumed(senderId uint64, message *packets.Packet_P
 
 func (g *InGame) handleSpore(senderId uint64, message *packets.Packet_Spore) {
 	g.client.SocketSendAs(message, senderId)
+}
+
+func (g *InGame) handleDisconnect(senderId uint64, message *packets.Packet_Disconnect) {
+	if senderId == g.client.Id() {
+		g.client.Broadcast(message)
+		g.client.SetState(&Connected{})
+	} else {
+		go g.client.SocketSendAs(message, senderId)
+	}
 }
 
 func (g *InGame) playerUpdateLoop(ctx context.Context) {

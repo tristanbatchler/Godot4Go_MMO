@@ -9,5 +9,6 @@ CREATE TABLE IF NOT EXISTS players (
     user_id INTEGER NOT NULL,
     name TEXT NOT NULL,
     best_score INTEGER NOT NULL DEFAULT 0,
+    color INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );

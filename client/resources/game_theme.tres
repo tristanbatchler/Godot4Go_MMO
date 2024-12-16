@@ -1,0 +1,15 @@
+[gd_resource type="Theme" format=3 uid="uid://8i7biu4ku8gp"]
+
+[resource]
+Button/font_sizes/font_size = 24
+Label/colors/font_shadow_color = Color(0.188235, 0.0901961, 0.0313726, 0.447059)
+Label/constants/shadow_outline_size = 7
+Label/font_sizes/font_size = 24
+LineEdit/font_sizes/font_size = 24
+RichTextLabel/colors/font_shadow_color = Color(0.188235, 0.0901961, 0.0313726, 0.447059)
+RichTextLabel/constants/shadow_outline_size = 5
+RichTextLabel/font_sizes/bold_font_size = 24
+RichTextLabel/font_sizes/bold_italics_font_size = 24
+RichTextLabel/font_sizes/italics_font_size = 24
+RichTextLabel/font_sizes/mono_font_size = 24
+RichTextLabel/font_sizes/normal_font_size = 24

@@ -1,0 +1,55 @@
+[gd_scene load_steps=2 format=3 uid="uid://bbvvcyjuidvji"]
+
+[ext_resource type="Script" path="res://classes/register_form/register_form.gd" id="1_k8p16"]
+
+[node name="RegisterForm" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_k8p16")
+
+[node name="Username" type="LineEdit" parent="."]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+placeholder_text = "Username"
+
+[node name="Password" type="LineEdit" parent="."]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+placeholder_text = "Password"
+virtual_keyboard_type = 6
+secret = true
+
+[node name="ConfirmPassword" type="LineEdit" parent="."]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+placeholder_text = "Confirm password"
+virtual_keyboard_type = 6
+secret = true
+
+[node name="ColorPicker" type="ColorPicker" parent="."]
+layout_mode = 2
+picker_shape = 1
+can_add_swatches = false
+sampler_visible = false
+color_modes_visible = false
+sliders_visible = false
+hex_visible = false
+presets_visible = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="ConfirmButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "Confirm"
+
+[node name="CancelButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+text = "Cancel"
