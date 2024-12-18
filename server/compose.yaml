@@ -1,0 +1,11 @@
+services:
+  gameserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ${DATA_PATH}:/gameserver/data
+    ports:
+      - "${PORT}:${PORT}"

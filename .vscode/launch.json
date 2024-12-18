@@ -11,6 +11,10 @@
             "mode": "auto",
             "program": "${workspaceFolder}/server/cmd/main.go",
             "output": "${workspaceFolder}/server/cmd/debug.exe",
+            "cwd": "${workspaceFolder}/server",
+            "args": [
+                "--config", "${workspaceFolder}/server/.env"
+            ]
         }
     ]
 }

@@ -5,7 +5,6 @@ const packets := preload("res://packets.gd")
 
 @export var handshake_headers: PackedStringArray
 @export var supported_protocols: PackedStringArray
-var tls_options: TLSOptions = null
 
 var socket := WebSocketPeer.new()
 var last_state := WebSocketPeer.STATE_CLOSED
@@ -14,7 +13,7 @@ signal connected_to_server()
 signal connection_closed()
 signal packet_received(packet: packets.Packet)
 
-func connect_to_url(url: String) -> int:
+func connect_to_url(url: String, tls_options: TLSOptions) -> int:
 	socket.supported_protocols = supported_protocols
 	socket.handshake_headers = handshake_headers
 
